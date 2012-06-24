@@ -9,7 +9,6 @@ package
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.PixelSnapping;
-	import flash.display.SimpleButton;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageDisplayState;
@@ -17,15 +16,12 @@ package
 	import flash.events.Event;
 	import flash.events.StatusEvent;
 	import flash.events.TimerEvent;
-	import flash.geom.Rectangle;
-	import flash.system.Capabilities;
-	import flash.system.System;
 	import flash.utils.Timer;
 	
 	import net.hires.debug.Stats;
 	
 	
-	public class FRECanonEOSTester_AIR extends Sprite
+	public class CanonEOSTester_AIR extends Sprite
 	{
 		
 		// camera 
@@ -57,7 +53,7 @@ package
 		
 		//[SWF( backgroundColor="#ffffff", frameRate="36", width="900", height="600")]
 		[SWF(backgroundColor="#ffffff", frameRate="24", width="1920", height="1080")]
-		public function FRECanonEOSTester_AIR()
+		public function CanonEOSTester_AIR()
 		{
 			
 			stage.align = StageAlign.TOP_LEFT;
