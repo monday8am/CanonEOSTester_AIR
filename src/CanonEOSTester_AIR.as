@@ -1,5 +1,6 @@
 package
 {
+	import com.bit101.components.ComboBox;
 	import com.bit101.components.Label;
 	import com.bit101.components.PushButton;
 	import com.bit101.components.TextArea;
@@ -33,13 +34,19 @@ package
 		
 		private var label				: Label;
 		private var connect_btn 		: PushButton;
-		private var shoot_btn 			: PushButton;
-		private var close_session_btn 	: PushButton;
-		private var open_session_btn 	: PushButton;
+		private var disconnect_btn  	: PushButton;	
+		private var take_pic_btn 		: PushButton;
+		private var press_h_btn 		: PushButton;
+		private var press_c_btn 		: PushButton;
+		private var press_o_btn 		: PushButton;		
 		private var startEFV_btn 		: PushButton;
-		private var getEFV_btn 			: PushButton;
 		private var stopEFV_btn 		: PushButton;	
-		private var disconnect_btn  	: PushButton;
+		private var av_combo			: ComboBox;
+		private var tv_combo			: ComboBox;
+		private var AeMode_combo		: ComboBox;
+		private var iso_combo			: ComboBox;		
+		
+		
 		private var label_events    	: TextArea;
 		
 		private var bmd					: BitmapData;
@@ -49,50 +56,60 @@ package
 		
 		private var timer 				: Timer;
 		private var time 				: int = 50;
+
 		
 		
-		//[SWF( backgroundColor="#ffffff", frameRate="36", width="900", height="600")]
-		[SWF(backgroundColor="#ffffff", frameRate="24", width="1920", height="1080")]
+		[SWF( backgroundColor="#ffffff", frameRate="36", width="900", height="600")]
 		public function CanonEOSTester_AIR()
 		{
 			
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;	
 			stage.displayState = StageDisplayState.NORMAL;
-			stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;			
 			
+			// create interface
 			
 			image_container = new Sprite();
 			addChild( image_container );
 			
 			label 			= new Label		( this, 30, 30, "Connecting... " );
-			connect_btn 	= new PushButton( this, 30, 60,  " CONNECT  ", onPressSaveBtn );
-			shoot_btn 		= new PushButton( this, 30, 90,  " SHOOT!!  ", onPressSaveBtn );
-			startEFV_btn 	= new PushButton( this, 30, 120,  " START EFV  ", onPressSaveBtn );
-			//getEFV_btn 		= new PushButton( this, 30, 150,  " GET EFV  ", onPressSaveBtn );
-			stopEFV_btn 	= new PushButton( this, 30, 150,  " STOP EFV   ", onPressSaveBtn );
-			disconnect_btn  = new PushButton( this, 30, 180,  " DISCONNECT", onPressSaveBtn );
-			label_events	= new TextArea( this, 150, 60, "logs... " ); label_events.width = 330; label_events.height = 390;
+			connect_btn 	= new PushButton( this, 30, 60,  "CONNECT", onPressSaveBtn );
+			disconnect_btn  = new PushButton( this, 30, 85,  "DISCONNECT", onPressSaveBtn );
+			
+			take_pic_btn 	= new PushButton( this, 30, 125,  "TAKE PICTURE", onPressSaveBtn );
+			press_h_btn		= new PushButton( this, 30, 150,  "PRESS HALFWAY", onPressSaveBtn );
+			press_c_btn 	= new PushButton( this, 30, 175,  "PRESS COMPLETELY", onPressSaveBtn );
+			press_o_btn 	= new PushButton( this, 30, 200,  "PRESS OFF", onPressSaveBtn );
+			
+			startEFV_btn 	= new PushButton( this, 30, 240,  " START EFV  ", onPressSaveBtn );
+			stopEFV_btn 	= new PushButton( this, 30, 265,  " STOP EFV   ", onPressSaveBtn );
+			
+			
+			
+			av_combo 		= new ComboBox ( this, 150, 125 );
+			tv_combo		= new ComboBox ( this, 150, 150 );
+			AeMode_combo 	= new ComboBox ( this, 150, 175 );
+			iso_combo 		= new ComboBox ( this, 150, 200 );
+			
+			label_events	= new TextArea( this, 30, 305, "logs... " ); label_events.width = 600; label_events.height = 150;
 			
 			
 			var stats : Stats = new Stats();
-			addChild( stats );
-			stats.x = 30; stats.y = 220;
-			
-			// create lib
-			//if( Capabilities.isDebugger )
-			//{
+			//addChild( stats );
+			//stats.x = 30; stats.y = 220;
 			
 			
-			//}
 			canon_lib = new CanonEOSLib();	
+			
+			return;
+			
 			
 			if( canon_lib.extensionContextReady == false )
 			{
 				label.text = "Error loading library : " +  canon_lib;	
 				
 				connect_btn.enabled = false;
-				shoot_btn.enabled = false;
+				take_pic_btn.enabled = false;
 				startEFV_btn.enabled = false;
 				stopEFV_btn.enabled = false;
 				disconnect_btn.enabled = false;
@@ -106,8 +123,6 @@ package
 			bmd = new BitmapData( 298, 390, false, 0xffffff );
 			bm = new Bitmap( bmd );
 			bm.pixelSnapping = PixelSnapping.NEVER;
-			//bm.scaleX = bm.scaleY = 2;
-			
 			
 			bm.x = 500; bm.y = 60; 
 			image_container.addChild( bm );	
@@ -128,7 +143,7 @@ package
 				camera.addEventListener( StatusEvent.STATUS, onChangeStatus );
 			}
 			
-			if( e.currentTarget == shoot_btn )
+			if( e.currentTarget == take_pic_btn )
 			{
 				//canon_lib.executeCommand( "TakePicture" ); 	
 				label_events.text += "Execute command TakePicture : " +  camera.takePicture( "c:\\\\test.jpg" ) + "\n";
