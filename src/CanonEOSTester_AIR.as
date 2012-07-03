@@ -79,35 +79,35 @@ package
 			image_container.y = 85;
 			
 			
-			label 			= new Label		( this, 30, 20,   "Connecting... " );
-			connect_btn 	= new PushButton( this, 30, 60,   "Connect", onPressSaveBtn );
-			disconnect_btn  = new PushButton( this, 30, 85,   "Disconnect", onPressSaveBtn );
-			take_pic_btn 	= new PushButton( this, 30, 125,  "TAKE Picture", onPressSaveBtn );
-			press_h_btn		= new PushButton( this, 30, 150,  "PRESS Halfway", onPressSaveBtn );
-			press_c_btn 	= new PushButton( this, 30, 175,  "PRESS Completely", onPressSaveBtn );
-			press_o_btn 	= new PushButton( this, 30, 200,  "PRESS Off", onPressSaveBtn );
+			label = new Label( this, 30, 20, "Connecting... " );
+			connect_btn = new PushButton( this, 30, 60, "Connect", onPressSaveBtn );
+			disconnect_btn = new PushButton( this, 30, 85, "Disconnect", onPressSaveBtn );
+			take_pic_btn = new PushButton( this, 30, 125, "TAKE Picture", onPressSaveBtn );
+			press_h_btn	= new PushButton( this, 30, 150, "PRESS Halfway", onPressSaveBtn );
+			press_c_btn = new PushButton( this, 30, 175, "PRESS Completely", onPressSaveBtn );
+			press_o_btn = new PushButton( this, 30, 200, "PRESS Off", onPressSaveBtn );
 			
-			startEFV_btn 	= new PushButton( this, 300, 60,  "START Evf", onPressSaveBtn );
-			stopEFV_btn 	= new PushButton( this, 410, 60,  "STOP Evf", onPressSaveBtn );
-			AFOn_btn 		= new PushButton( this, 30,  275,  "Evf AF On", onPressSaveBtn );
-			AFOff_btn 		= new PushButton( this, 30,  300,  "Evf AF Off", onPressSaveBtn );			
+			startEFV_btn = new PushButton( this, 300, 60, "START Evf", onPressSaveBtn );
+			stopEFV_btn = new PushButton( this, 410, 60, "STOP Evf", onPressSaveBtn );
+			AFOn_btn = new PushButton( this, 30,  275, "Evf AF On", onPressSaveBtn );
+			AFOff_btn = new PushButton( this, 30,  300, "Evf AF Off", onPressSaveBtn );			
 			
-			label_events	= new TextArea( this, 30, 330, "logs... " ); label_events.width = 623; label_events.height = 170;
+			label_events = new TextArea( this, 30, 330, "logs... " ); label_events.width = 623; label_events.height = 170;
 			
-			var label1:Label= new Label	   ( this, 150, 40, "Av ( Camera aperture ) : " );
-			av_combo 		= new ComboBox ( this, 150, 60, "",  EDSDKValues.Av ); av_combo.width = 130;
-			var label2:Label= new Label	   ( this, 150, 80, "Tv ( Shutter speed ) : " );
-			tv_combo		= new ComboBox ( this, 150, 100, "", EDSDKValues.Tv ); tv_combo.width = 130;
-			var label3:Label= new Label	   ( this, 150, 120, "Ae ( Shooting mode ) : " );
-			AeMode_combo 	= new ComboBox ( this, 150, 140, "", EDSDKValues.AeMode ); AeMode_combo.width = 130;
-			var label4:Label= new Label	   ( this, 150, 160, "ISO ( Sensor sensitivity ) : " );
-			iso_combo 		= new ComboBox ( this, 150, 180, "", EDSDKValues.Iso ); iso_combo.width = 130;
-			var label5:Label= new Label	   ( this, 150, 200, "Exposure Compensation : " );
-			expo_combo 		= new ComboBox ( this, 150, 220, "", EDSDKValues.ExposureCompensation ); expo_combo.width = 130;
-			var label6:Label= new Label	   ( this, 150, 240, "Metering Mode : " );
-			met_combo 		= new ComboBox ( this, 150, 260, "", EDSDKValues.MeteringMode ); met_combo.width = 130;
-			var label7:Label= new Label	   ( this, 150, 280, "Image Quality : " );
-			img_combo 		= new ComboBox ( this, 150, 300, "", EDSDKValues.ImageQuality ); img_combo.width = 130;
+			var label1:Label = new Label( this, 150, 40, "Av ( Camera aperture ) : " );
+			av_combo = new ComboBox( this, 150, 60, "", EDSDKValues.Av ); av_combo.width = 130;
+			var label2:Label = new Label( this, 150, 80, "Tv ( Shutter speed ) : " );
+			tv_combo = new ComboBox( this, 150, 100, "", EDSDKValues.Tv ); tv_combo.width = 130;
+			var label3:Label= new Label( this, 150, 120, "Ae ( Shooting mode ) : " );
+			AeMode_combo = new ComboBox( this, 150, 140, "", EDSDKValues.AeMode ); AeMode_combo.width = 130;
+			var label4:Label = new Label( this, 150, 160, "ISO ( Sensor sensitivity ) : " );
+			iso_combo = new ComboBox( this, 150, 180, "", EDSDKValues.Iso ); iso_combo.width = 130;
+			var label5:Label = new Label( this, 150, 200, "Exposure Compensation : " );
+			expo_combo = new ComboBox( this, 150, 220, "", EDSDKValues.ExposureCompensation ); expo_combo.width = 130;
+			var label6:Label = new Label( this, 150, 240, "Metering Mode : " );
+			met_combo = new ComboBox( this, 150, 260, "", EDSDKValues.MeteringMode ); met_combo.width = 130;
+			var label7:Label = new Label( this, 150, 280, "Image Quality : " );
+			img_combo = new ComboBox( this, 150, 300, "", EDSDKValues.ImageQuality ); img_combo.width = 130;
 			
 			
 			
