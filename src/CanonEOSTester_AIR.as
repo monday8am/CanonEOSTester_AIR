@@ -137,7 +137,6 @@ package
 				label.text = "Communicacion ready : " +  canon_lib.isSupported();
 			}
 			
-			
 			stage.addEventListener( Event.CLOSE, onClose );
 		}
 		
