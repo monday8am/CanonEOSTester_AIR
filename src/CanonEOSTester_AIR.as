@@ -57,7 +57,7 @@ package
 		private var bmd					: BitmapData;
 		private var bm					: Bitmap;
 		private var image_container		: Sprite;
-
+		
 		
 		public function CanonEOSTester_AIR()
 		{
@@ -91,7 +91,7 @@ package
 			stopEFV_btn 	= new PushButton( this, 410, 60,  "STOP Evf", onPressSaveBtn );
 			AFOn_btn 		= new PushButton( this, 30,  275,  "Evf AF On", onPressSaveBtn );
 			AFOff_btn 		= new PushButton( this, 30,  300,  "Evf AF Off", onPressSaveBtn );			
-
+			
 			label_events	= new TextArea( this, 30, 330, "logs... " ); label_events.width = 623; label_events.height = 170;
 			
 			var label1:Label= new Label	   ( this, 150, 40, "Av ( Camera aperture ) : " );
@@ -108,17 +108,17 @@ package
 			met_combo 		= new ComboBox ( this, 150, 260, "", EDSDKValues.MeteringMode ); met_combo.width = 130;
 			var label7:Label= new Label	   ( this, 150, 280, "Image Quality : " );
 			img_combo 		= new ComboBox ( this, 150, 300, "", EDSDKValues.ImageQuality ); img_combo.width = 130;
-									
-	
-
+			
+			
+			
 			var stats : Stats = new Stats();
 			//addChild( stats );
 			//stats.x = 30; stats.y = 220;
-						
+			
 			/**/
 			if( canon_lib.extensionContextReady == false )
 			{
-				label.text = "Error loading library : " +  canon_lib;	
+				label.text = "Error loading library";	
 				
 				connect_btn.enabled = false;
 				take_pic_btn.enabled = false;
@@ -128,12 +128,13 @@ package
 				press_h_btn.enabled = false;
 				press_c_btn.enabled = false;
 				press_o_btn.enabled = false;
+				AFOn_btn.enabled = false;		
+				AFOff_btn.enabled = false;		
 				
-				log( "Error: " + canon_lib.lastError );
 			}
 			else
 			{
-				//label.text = "Communicacion ready : " +  canon_lib.isSupported();
+				label.text = "Communicacion ready : " +  canon_lib.isSupported();
 			}
 			
 			
@@ -161,7 +162,7 @@ package
 			
 			if( e.currentTarget == take_pic_btn )
 			{	
-				log( "take picture : " +  camera.takePicture( "c:\\\\test.jpg" ));
+				log( "take picture : " +  camera.takePicture( "c:\\Temp\\test.jpg" ));
 			}
 			
 			if( e.currentTarget == startEFV_btn )
@@ -198,7 +199,7 @@ package
 			{
 				log( "Evf AF On : " + camera.evfAFOn() );
 			}			
-						
+			
 			
 		}
 		
@@ -231,33 +232,33 @@ package
 					camera.getEVF( bmd);
 				}
 			}
-			
-			
+				
+				
 			else if( event.level == Camera.DeviceBusy )
 			{
 				log( "Device busy" );
 			}
-			
-			
+				
+				
 			else if( event.level == Camera.PropertyChanged )
 			{
-
+				
 				// get property value
 				
 				propId = uint( "0x" +  event.code );
 				
-				if( propId == EDSDKTypes.kEdsPropID_Av ) 		initPropertyCombo( av_combo , camera.getAv() );
-				if( propId == EDSDKTypes.kEdsPropID_Tv ) 		initPropertyCombo( tv_combo , camera.getTv() );
-				if( propId == EDSDKTypes.kEdsPropID_ISOSpeed )	initPropertyCombo( iso_combo, camera.getIso() );
+				if( propId == EDSDKTypes.kEdsPropID_Av ) initPropertyCombo( av_combo , camera.getAv() );
+				if( propId == EDSDKTypes.kEdsPropID_Tv ) initPropertyCombo( tv_combo , camera.getTv() );
+				if( propId == EDSDKTypes.kEdsPropID_ISOSpeed ) initPropertyCombo( iso_combo, camera.getIso() );
 				if( propId == EDSDKTypes.kEdsPropID_ExposureCompensation ) initPropertyCombo( expo_combo, camera.getExposureComposition() );
-				if( propId == EDSDKTypes.kEdsPropID_AEMode ) 	initPropertyCombo( AeMode_combo, camera.getAeMode() );
-				if( propId == EDSDKTypes.kEdsPropID_MeteringMode ) 	initPropertyCombo( met_combo, camera.getMeteringMode() );
-				if( propId == EDSDKTypes.kEdsPropID_ImageQuality ) 	initPropertyCombo( img_combo, camera.getImageQuality() );
-
+				if( propId == EDSDKTypes.kEdsPropID_AEMode ) initPropertyCombo( AeMode_combo, camera.getAeMode() );
+				if( propId == EDSDKTypes.kEdsPropID_MeteringMode ) initPropertyCombo( met_combo, camera.getMeteringMode() );
+				if( propId == EDSDKTypes.kEdsPropID_ImageQuality ) initPropertyCombo( img_combo, camera.getImageQuality() );
+				
 				log( "Device property changed : " + propId );
 			}
-			
-			
+				
+				
 			else if( event.level == Camera.PropertyDescChanged )
 			{
 				
@@ -308,7 +309,7 @@ package
 				
 				log( "Property Desc changed : " + propId );
 			}
-			
+				
 			else
 			{
 				log( "status: level " + event.level + ". code = " + event.code );
@@ -375,7 +376,7 @@ package
 			label_events.textField.scrollV = label_events.textField.length;
 		}
 		
-
+		
 		private function initPropertyCombo( combo : ComboBox, value : Object):void
 		{
 			var count : int = 0;
