@@ -95,18 +95,18 @@ package
 
 			label_events	= new TextArea( this, 30, 305, "logs... " ); label_events.width = 623; label_events.height = 150;
 			
-			var label1:Label= new Label	   ( this, 150, 60, "AV Values : " );
+			var label1:Label= new Label	   ( this, 150, 60, "Av ( Camera aperture ) : " );
 			av_combo 		= new ComboBox ( this, 150, 80, "",  EDSDKValues.Av ); av_combo.width = 130;
-			var label2:Label= new Label	   ( this, 150, 100, "TV Values : " );
+			var label2:Label= new Label	   ( this, 150, 100, "Tv ( Shutter speed ) : " );
 			tv_combo		= new ComboBox ( this, 150, 120, "", EDSDKValues.Tv ); tv_combo.width = 130;
-			var label3:Label= new Label	   ( this, 150, 140, "Ae Modes : " );
+			var label3:Label= new Label	   ( this, 150, 140, "Ae ( Shooting mode ) : " );
 			AeMode_combo 	= new ComboBox ( this, 150, 160, "", EDSDKValues.AeMode ); AeMode_combo.width = 130;
-			var label4:Label= new Label	   ( this, 150, 180, "ISO Values : " );
+			var label4:Label= new Label	   ( this, 150, 180, "ISO ( Sensor sensitivity ) : " );
 			iso_combo 		= new ComboBox ( this, 150, 200, "", EDSDKValues.Iso ); iso_combo.width = 130;
 			var label5:Label= new Label	   ( this, 150, 245, "Exposure Compensation : " );
 			expo_combo 		= new ComboBox ( this, 150, 265, "", EDSDKValues.ExposureCompensation ); expo_combo.width = 130;	
 	
-			
+
 			var stats : Stats = new Stats();
 			//addChild( stats );
 			//stats.x = 30; stats.y = 220;
@@ -129,7 +129,7 @@ package
 			}
 			else
 			{
-				label.text = "Communicacion ready : " +  canon_lib.isSupported();
+				//label.text = "Communicacion ready : " +  canon_lib.isSupported();
 			}
 			
 			
@@ -147,13 +147,6 @@ package
 				log( "Try connect camera " );
 				camera = canon_lib.getCamera();
 				camera.addEventListener( StatusEvent.STATUS, onChangeStatus );
-				log( "AEMode: " + camera.getAeMode() );
-				log( "Av	: " + camera.getAv() );
-				log( "Tv	: " + camera.getTv() );
-				log( "Iso	: " + camera.getIso() );
-				log( "Exposure: " + camera.getExposureComposition() );
-
-				
 			}
 			
 			if( e.currentTarget == disconnect_btn )
@@ -189,38 +182,28 @@ package
 			
 			if( e.currentTarget == press_o_btn )
 			{
-				log( "Pressing Off : " + "0x" + camera.pressingOff() );
-				log( "AEMode: " + "0x" + camera.getAeMode().toString(16) );
-				log( "Av	: " + "0x" + camera.getAv().toString(16) );
-				log( "Tv	: " + "0x" +camera.getTv().toString(10) );
-				log( "Iso	: " + "0x" + camera.getIso().toString(16) );
-				log( "Exposure: " + "0x" + camera.getExposureComposition().toString(16) );
-				
-				setComboValue( av_combo, camera.getAv() );
-				setComboValue( AeMode_combo, camera.getAeMode() );
-				setComboValue( tv_combo, camera.getTv() );
-				setComboValue( iso_combo, camera.getIso() );
-				setComboValue( expo_combo, camera.getExposureComposition() );
-				
-				
+				log( "Pressing Off : " + camera.pressingOff() );
 			}			
 			
 		}
 		
+		/**
+		 * 
+		 * Event Handlers 
+		 * 
+		 */
 		
-		//
-		// Catch camera events
-		//
 		private function onChangeStatus(event : StatusEvent ):void
 		{
-			if( event.code == "downloadEVF"  )
+			
+			if( event.level == Camera.EvfDataChanged  )
 			{
 				if( bmd == null )
 				{
 					// get evf width and heigh
 					// and create bitmapData
 					
-					bmd = new BitmapData( camera.getEvfWidth(), camera.getEvfHeight(), false, 0xff0000 );
+					bmd = new BitmapData( camera.getEvfWidth(), camera.getEvfHeight(), false, 0xffffff );
 					bm = new Bitmap( bmd );
 					image_container.addChild( bm );	
 					
@@ -230,15 +213,129 @@ package
 					camera.getEVF( bmd);
 				}
 			}
-			else if(  event.code == "DeviceBusy" )
+			
+			else if( event.level == Camera.DeviceBusy )
 			{
+				log( "Device busy" );
+			}
+			
+			else if( event.level == Camera.PropertyChanged )
+			{
+
+				// get property value
+				
+				var propId : uint = uint( "0x" +  event.code );
+				
+				if( propId == EDSDKTypes.kEdsPropID_Av )
+				{
+					initPropertyCombo( av_combo , camera.getAv() );
+					av_combo.addEventListener( Event.SELECT, onUserChangeProperty );
+				}
+				
+				if( propId == EDSDKTypes.kEdsPropID_Tv ) 
+				{
+					initPropertyCombo( tv_combo , camera.getTv() );
+					tv_combo.addEventListener( Event.SELECT, onUserChangeProperty );
+				}
+				
+				if( propId == EDSDKTypes.kEdsPropID_ISOSpeed ) 
+				{
+					initPropertyCombo( iso_combo, camera.getIso() );
+					iso_combo.addEventListener( Event.SELECT, onUserChangeProperty );
+				}
+				
+				if( propId == EDSDKTypes.kEdsPropID_ExposureCompensation ) 
+				{
+					initPropertyCombo( expo_combo, camera.getExposureComposition() );
+					expo_combo.addEventListener( Event.SELECT, onUserChangeProperty );
+				}
+				
+				if( propId == EDSDKTypes.kEdsPropID_AEMode )  
+				{
+					initPropertyCombo( AeMode_combo, camera.getAeMode() );
+					AeMode_combo.addEventListener( Event.CHANGE, onUserChangeProperty );
+				}
+				
+				log( "Device property changed : " + propId );
 				
 			}
+			
+			else if( event.level == Camera.PropertyDescChanged )
+			{
+				
+				var propValues : Array = new Array();
+				var propId : uint = uint( "0x" +  event.code );
+
+				
+				if( propId == EDSDKTypes.kEdsPropID_Av )
+				{
+					camera.getCameraPropertyDesc( EDSDKTypes.kEdsPropID_Av, propValues );
+					setComboValues( av_combo, propValues );
+				}
+				
+				/**/
+				if( propId == EDSDKTypes.kEdsPropID_Tv ) 
+				{
+					camera.getCameraPropertyDesc( EDSDKTypes.kEdsPropID_Tv, propValues );
+					setComboValues( tv_combo, propValues );
+				}
+				
+				if( propId == EDSDKTypes.kEdsPropID_ISOSpeed ) 
+				{
+					camera.getCameraPropertyDesc( EDSDKTypes.kEdsPropID_ISOSpeed, propValues );
+					setComboValues( iso_combo, propValues );
+				}
+				
+				if( propId == EDSDKTypes.kEdsPropID_ExposureCompensation ) 
+				{
+					camera.getCameraPropertyDesc( EDSDKTypes.kEdsPropID_ExposureCompensation, propValues );
+					setComboValues( expo_combo, propValues );
+				}
+				
+				if( propId == EDSDKTypes.kEdsPropID_AEMode )  
+				{
+					camera.getCameraPropertyDesc( EDSDKTypes.kEdsPropID_AEMode, propValues );
+					setComboValues( AeMode_combo, propValues );
+				}	
+				
+				
+				log( "Property Desc changed : " + propId );
+			}
+			
 			else
 			{
 				log( "status: level " + event.level + ". code = " + event.code );
 			}
 		}
+		
+		
+		private function onUserChangeProperty( event : Event ):void
+		{		
+			if( event.currentTarget == iso_combo  )
+			{
+				log( "set ISO :" + camera.setIso( uint( iso_combo.selectedItem.data )));
+			}
+			
+			if( event.currentTarget == tv_combo  )
+			{
+				log( "set Tv :" + camera.setTv( uint( tv_combo.selectedItem.data )));
+			}
+			
+			if( event.currentTarget == av_combo  )
+			{
+				log( "set Av :" + camera.setAv( uint( av_combo.selectedItem.data )));
+			}
+			
+			if( event.currentTarget == AeMode_combo  )
+			{
+				log( "set AeMode :" + camera.setAeMode( uint( AeMode_combo.selectedItem.data )));
+			}
+			
+			if( event.currentTarget == expo_combo  )
+			{
+				log( "set ISO :" + camera.setExposureCompensation( uint( expo_combo.selectedItem.data )));
+			}			
+		}		
 		
 		
 		private function onClose(event:Event):void
@@ -260,7 +357,7 @@ package
 		}
 		
 
-		private function setComboValue( combo : ComboBox, value : Object):void
+		private function initPropertyCombo( combo : ComboBox, value : Object):void
 		{
 			var count : int = 0;
 			
@@ -272,6 +369,24 @@ package
 					count = combo.items.length;
 				}
 				count++;
+			}
+		}
+		
+		private function setComboValues(  combo : ComboBox, newValues : Array ):void
+		{
+			var count : int = 0;
+			
+			while( count < combo.items.length ) 
+			{
+				if( newValues.indexOf( combo.items[ count ].data ) == -1 )
+				{
+					log( "remove " + combo.items[ count ].label );
+					combo.removeItemAt( count );
+				}
+				else
+				{
+					count++;
+				}
 			}
 		}
 		
