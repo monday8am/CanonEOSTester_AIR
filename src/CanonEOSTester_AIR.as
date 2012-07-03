@@ -420,7 +420,7 @@ package
 				}
 			}
 			
-			combo.selectedItem = selectedItem;
+			initPropertyCombo( combo, selectedItem );
 			combo.enabled = true;
 		}
 		
