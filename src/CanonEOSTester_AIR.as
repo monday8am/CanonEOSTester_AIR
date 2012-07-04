@@ -406,7 +406,7 @@ package
 				return;
 			}
 			
-			var selectedItem = combo.selectedItem;
+			var selectedItem : Object = combo.selectedItem;
 			
 			while( count < combo.items.length ) 
 			{
