@@ -4,7 +4,7 @@ package
 	import com.bit101.components.Label;
 	import com.bit101.components.PushButton;
 	import com.bit101.components.TextArea;
-	import com.monday8am.ane.Camera;
+	import com.monday8am.ane.CanonEOSCamera;
 	import com.monday8am.ane.CanonEOSLib;
 	import com.monday8am.ane.EDSDKTypes;
 	import com.monday8am.ane.EDSDKValues;
@@ -27,7 +27,7 @@ package
 		// camera 
 		
 		private var canon_lib : CanonEOSLib;
-		private var camera 	  : Camera;
+		private var camera 	  : CanonEOSCamera;
 		
 		// interface
 		
@@ -214,7 +214,7 @@ package
 			var propId : uint;
 			
 			
-			if( event.level == Camera.EvfDataChanged  )
+			if( event.level == CanonEOSCamera.EvfDataChanged  )
 			{
 				if( bmd == null )
 				{
@@ -233,13 +233,13 @@ package
 			}
 				
 				
-			else if( event.level == Camera.DeviceBusy )
+			else if( event.level == CanonEOSCamera.DeviceBusy )
 			{
 				log( "Device busy" );
 			}
 				
 				
-			else if( event.level == Camera.PropertyChanged )
+			else if( event.level == CanonEOSCamera.PropertyChanged )
 			{
 				
 				// get property value
@@ -258,7 +258,7 @@ package
 			}
 				
 				
-			else if( event.level == Camera.PropertyDescChanged )
+			else if( event.level == CanonEOSCamera.PropertyDescChanged )
 			{
 				
 				var propValues : Array = new Array();
